@@ -3,6 +3,19 @@
 api/user/info
 ```
 
+DB : Synergy
+
+```sql
+SELECT public."GetConsumerDetails"(
+	<consumerid integer>, 
+	<datetime text>
+)
+
+```
+
+OR
+
+
 ```sql
 DECLARE
     DateFormat TEXT DEFAULT 'YYYY-MM-DD HH24:MI:SS';
@@ -101,6 +114,20 @@ END
 ```
 api/consumer/{consumer_id}/consumptions/overview?month={month_number}&year={year_number}&meterType=1
 ```
+
+DB : Finance
+
+```sql
+SELECT public."GetConsumptionDetails"(
+	<metertypeid integer>, 
+	<consumerid integer>, 
+	<startdate text>, 
+	<enddate text>
+)
+
+```
+
+OR
 
 ```sql
 DECLARE
@@ -248,3 +275,214 @@ After get the data, its group together in the API logic.
 - RetailerAllocation
 - ConsumerBilling
 
+
+*Query 1*
+
+```sql
+SELECT 
+	"DateTime", 
+    SUM("AllocatedEnergy") AS "AllocatedEnergy"
+FROM 
+	"Allocation"."ProducerT1Allocation"
+WHERE
+	"ConsumerRID" = {CONSUMER_ID} AND 
+    "MeterTypeRID" = {METER_TYPE_ID} AND 
+	"DateTime" BETWEEN TO_TIMESTAMP({START_DATE}, DateFormat) AND TO_TIMESTAMP({END_DATE}, DateFormat);
+GROUP BY
+	"DateTime", 
+	
+```
+
+
+*Query 2*
+
+```sql
+SELECT 
+    "DateTime",     
+    SUM("AllocatedEnergy") AS "AllocatedEnergy"
+FROM 
+	"Allocation"."ProducerT2Allocation"
+WHERE
+	"ConsumerRID" = {CONSUMER_ID} AND 
+    "MeterTypeRID" = {METER_TYPE_ID} AND 
+	"DateTime" BETWEEN TO_TIMESTAMP({START_DATE}, DateFormat) AND TO_TIMESTAMP({END_DATE}, DateFormat);
+GROUP BY
+	"DateTime"
+	
+```
+
+
+*Query 3*
+
+```sql
+SELECT 
+	"DateTime", 
+	SUM("AllocatedEnergy") AS "AllocatedEnergy"
+	
+FROM 
+	"Allocation"."RetailerAllocation"
+WHERE
+	"ConsumerRID" = {CONSUMER_ID} AND 
+    "MeterTypeRID" = {METER_TYPE_ID} AND 
+	"DateTime" BETWEEN TO_TIMESTAMP({START_DATE}, DateFormat) AND TO_TIMESTAMP({END_DATE}, DateFormat);
+GROUP BY
+	"DateTime"
+	
+```
+
+
+*Query 4*
+
+```sql
+SELECT 
+	"DateTime", 
+	SUM("RetailerAmount") AS "RetailerAmount", 
+	SUM("T1Amount") AS "T1Amount", 
+	SUM("T2ConsumerAmount") AS "T2ConsumerAmount"
+FROM 
+	"Billing"."ConsumerBilling"
+WHERE
+	"ConsumerRID" = {CONSUMER_ID} AND 
+    "MeterTypeRID" = {METER_TYPE_ID} AND 
+	"DateTime" BETWEEN TO_TIMESTAMP({START_DATE}, DateFormat) AND TO_TIMESTAMP({END_DATE}, DateFormat);
+GROUP BY
+	"DateTime"
+```
+
+
+**Then have to combine the output together from DateTime and send to the Chart**   
+Sample PHP script is below
+
+```php
+$breakdowns = [];
+$counter = 0;
+
+while ($counter != $periodCount) {
+    $key = $startDate->copy()->format($dateFormatKey);
+    if ($keyBy != Constants::KEY_DAY) {
+        $key = $startDate->copy()->setTimezone($timezone)->format($dateFormatKey);
+        $key = (int)$key;
+    }
+
+    $producerT1AllocatedEnergy = (isset($producerT1Allocations[$key])) ? $producerT1Allocations[$key]->AllocatedEnergy : 0;
+    $producerT2AllocatedEnergy = (isset($producerT2Allocations[$key])) ? $producerT2Allocations[$key]->AllocatedEnergy : 0;
+    $retailerAllocatedEnergy = (isset($retailerAllocations[$key])) ? $retailerAllocations[$key]->AllocatedEnergy : 0;
+
+    $retailerBillAmount = (isset($consumerBillings[$key])) ? $consumerBillings[$key]->RetailerAmount : 0;
+    $producerT1BillAmount = (isset($consumerBillings[$key])) ? $consumerBillings[$key]->T1Amount : 0;
+    $producerT2BillAmount = (isset($consumerBillings[$key])) ? $consumerBillings[$key]->T2ConsumerAmount : 0;
+
+    $currentStartDate = $startDate->copy()->format(Constants::DATETIME_FORMAT);
+    $currentEndDate = $startDate->copy()->$carbonIncrementFunction($incrementValue)->subMinutes(30)->format(Constants::DATETIME_FORMAT);
+
+    $breakdowns[] = [
+        'startDate' => $currentStartDate,
+        'endDate' => $currentEndDate,
+        'bill' => [
+            't1' => Functions::getRoundedToFourDecimals($producerT1BillAmount),
+            't2' => Functions::getRoundedToFourDecimals($producerT2BillAmount),
+            'retailer' => Functions::getRoundedToFourDecimals($retailerBillAmount),
+        ],
+        'usage' => [
+            't1' => Functions::getRoundedToFourDecimals($producerT1AllocatedEnergy),
+            't2' => Functions::getRoundedToFourDecimals($producerT2AllocatedEnergy),
+            'retailer' => Functions::getRoundedToFourDecimals($retailerAllocatedEnergy),
+        ],
+    ];
+
+    $counter++;
+    $startDate->$carbonIncrementFunction($incrementValue);
+}
+
+return $this->respondWithArray(['meterType' => $meterType, 'data' => array_values(Arr::sort($breakdowns, function ($value) {
+    return $value['startDate'];
+});
+
+```
+
+
+
+## getDailySummary ##
+
+For Daily Summary, we need the same dataset as the Breakdown (Can use the same code above). Difference is, we need to SUM the total allocation (T1 + T2 + Retailer) and multiply each allocation from the Price mentioned in the DB.
+
+Sample PHP Script is below
+
+
+```PHP
+$t1 = [];
+$totalT1BillPerPeriod = 0;
+$totalT1UsagePerPeriod = 0;
+
+if (isset($producerT1Allocations[$dateKey])) {
+    $producerT1Allocation = $producerT1Allocations[$dateKey];
+    $currentT1 = [
+        'name' => $consumer->ProducerName,
+        'usage' => Functions::getRoundedToFourDecimals($producerT1Allocation->AllocatedEnergy),
+        'bill' => Functions::getRoundedToFourDecimals(($producerT1Allocation->AllocatedEnergy * $consumer->ProducerPlanPrice)),
+    ];
+
+    $totalT1BillPerPeriod = $currentT1['bill'];
+    $totalT1UsagePerPeriod = $currentT1['usage'];
+
+    $t1[] = $currentT1;
+    $providerCounter++;
+}
+
+$t2 = [];
+$totalT2BillPerPeriod = 0;
+$totalT2UsagePerPeriod = 0;
+if (isset($producerT2Allocations[$dateKey])) {
+    foreach ($producerT2Allocations[$dateKey] as $producerT2Allocation) {
+        $t2Record = [
+            'name' => $producerT2Allocation->producer->user->LegalName,
+            'usage' => Functions::getRoundedToFourDecimals($producerT2Allocation->AllocatedEnergy),
+            'bill' => Functions::getRoundedToFourDecimals(($producerT2Allocation->AllocatedEnergy * $producerT2Allocation->BuyPrice)),
+        ];
+
+        $totalT2BillPerPeriod += $t2Record['bill'];
+        $totalT2UsagePerPeriod += $t2Record['usage'];
+        $t2[] = $t2Record;
+        $providerCounter++;
+    }
+}
+
+$retailer = [];
+$totalRetailerBillPerPeriod = 0;
+$totalRetailerUsagePerPeriod = 0;
+
+if (isset($retailerAllocations[$dateKey])) {
+    $retailerAllocation = $retailerAllocations[$dateKey];
+    $currentRetailer = [
+        'name' => $consumer->RetailerName,
+        'usage' => Functions::getRoundedToFourDecimals($retailerAllocation->AllocatedEnergy),
+        'bill' => Functions::getRoundedToFourDecimals(($retailerAllocation->AllocatedEnergy * $consumer->RetailerPlanPrice)),
+    ];
+
+    $totalRetailerBillPerPeriod = $currentRetailer['bill'];
+    $totalRetailerUsagePerPeriod = $currentRetailer['usage'];
+    $retailer[] = $currentRetailer;
+    $providerCounter++;
+}
+
+$totalT1Bill += $totalT1BillPerPeriod;
+$totalT2Bill += $totalT2BillPerPeriod;
+$totalRetailerBill += $totalRetailerBillPerPeriod;
+
+$usagePerPeriod = Functions::getRoundedToFourDecimals(($totalT1UsagePerPeriod + $totalT2UsagePerPeriod + $totalRetailerUsagePerPeriod));
+$billPerPeriod = Functions::getRoundedToFourDecimals(($totalT1BillPerPeriod + $totalT2BillPerPeriod + $totalRetailerBillPerPeriod));
+
+$transactions[] = [
+    'startDate' => $dateKey,
+    'endDate' => $startDate->copy()->addMinutes(29)->addSeconds(59)->format(Constants::DATETIME_FORMAT),
+    'usagePerPeriod' => $usagePerPeriod,
+    'billPerPeriod' => $billPerPeriod,
+    'numberOfProviders' => $providerCounter,
+    't1' => $t1,
+    't2' => $t2,
+    'retailer' => $retailer,
+];
+
+$startDate->addMinutes(30);
+
+```
