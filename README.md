@@ -1,3 +1,15 @@
+# Files to Check in Repo
+
+```
+app/common/Queries.php
+
+app/Models/V2/*.*               // All Files
+app/Http/Controllers/V2/*.*     // All Files
+
+App/Repositories/V2/*.*         // All Files
+```
+
+
 ## UserInfo
 ```
 api/user/info
@@ -403,6 +415,12 @@ return $this->respondWithArray(['meterType' => $meterType, 'data' => array_value
 
 
 ## getDailySummary ##
+
+```
+api/consumer/{consumer_id}/consumptions/summary-per-day?date=2022-11-12&meterType=1
+```
+
+
 
 For Daily Summary, we need the same dataset as the Breakdown (Can use the same code above). Difference is, we need to SUM the total allocation (T1 + T2 + Retailer) and multiply each allocation from the Price mentioned in the DB.
 
