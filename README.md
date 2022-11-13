@@ -504,3 +504,95 @@ $transactions[] = [
 $startDate->addMinutes(30);
 
 ```
+
+
+---
+
+# Generator API Queries
+
+## Transaction Overview
+
+```
+api/prosumer/{prosumer_id}/transactions/overview?month=8&year=2022&meterType=1
+```
+
+
+
+
+## Past 6 Months Usage
+
+```
+api/prosumer/{prosumer_id}/transactions/usage?meterType=1
+```
+
+According to PDF, we only need to show *Monthly Green Energy Sold* .  
+so, for that, we have to get TotalGreenEnergy Allocated and the Values :)
+
+As before, we have to combine them together. You can use a union query too.
+
+``
+Get KWh Values
+``
+
+```sql
+SELECT
+    "DateTime",
+    SUM("AllocatedEnergy") AS "TT"
+FROM 
+    "Allocation"."ProducerT1Allocation"
+WHERE
+    "DateTime" BETWEEN '2020-11-01 00:00:00' AND '2021-01-31 23:30:00'
+    AND "MeterTypeRID" = 1
+    AND "ProducerRID" = {PRODUCER_RID}
+GROUP BY
+    "DateTime"
+
+UNION ALL
+
+SELECT 
+    "DateTime",
+    SUM("AllocatedEnergy") AS "TT"
+FROM
+    "Allocation"."ProducerT2Allocation"
+WHERE
+    "DateTime" BETWEEN '2020-11-01 00:00:00' AND '2021-01-31 23:30:00'
+    AND "MeterTypeRID" = 1
+    AND "ProducerRID" =  {PRODUCER_RID}
+GROUP BY
+    "DateTime"
+
+
+```
+
+``
+Get dollar Values
+``
+
+```sql
+SELECT 
+	"DateTime", 
+	SUM("Amount") AS "Amount"
+FROM 
+	"Earning"."ProducerT1Earning"
+WHERE
+	"DateTime" BETWEEN '2020-11-01 00:00:00' AND '2021-01-31 23:30:00'
+    AND "MeterTypeRID" = 1
+    AND "ProducerRID" = {PRODUCER_RID}
+GROUP BY
+	"DateTime"
+
+UNION ALL
+
+SELECT 
+	"DateTime", 
+	SUM("ProducerAmount") AS "Amount"
+FROM 
+	"Earning"."ProducerT2Earning"
+WHERE
+	"DateTime" BETWEEN '2020-11-01 00:00:00' AND '2021-01-31 23:30:00'
+    AND "MeterTypeRID" = 1
+    AND "ProducerRID" = {PRODUCER_RID}
+GROUP BY
+	"DateTime"
+
+```
