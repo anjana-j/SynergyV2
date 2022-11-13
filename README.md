@@ -510,11 +510,124 @@ $startDate->addMinutes(30);
 
 # Generator API Queries
 
-## Transaction Overview
+## Green Energy Transactions
 
 ```
 api/prosumer/{prosumer_id}/transactions/overview?month=8&year=2022&meterType=1
 ```
+
+
+
+Follow exact as ``Consumption Overview`` queries
+
+```sql
+DECLARE
+    DateFormat TEXT DEFAULT 'YYYY-MM-DD HH24:MI:SS';
+    T1Energy NUMERIC;
+    T1Earning NUMERIC;
+    T2Energy NUMERIC;
+    T2ConsumerAmount NUMERIC;
+    T2BuyPrice NUMERIC;
+    RetailerEnergy NUMERIC;
+    RetailerEarning NUMERIC;
+BEGIN
+    SELECT 
+        SUM("AllocatedEnergy") 
+    INTO 
+        T1Energy 
+    FROM 
+        "Allocation"."ProducerT1Allocation"
+    WHERE 
+        "ConsumerRID" = {CONSUMER_ID} AND 
+        "MeterTypeRID" = {METER_TYPE_ID} AND 
+        "DateTime" BETWEEN TO_TIMESTAMP({START_DATE}, DateFormat) AND TO_TIMESTAMP({END_DATE}, DateFormat);
+
+    SELECT 
+        SUM("Amount")
+    INTO 
+        T1Earning 
+    FROM 
+        "Earning"."ProducerT1Earning"
+    WHERE 
+        "ConsumerRID" = {CONSUMER_ID} AND 
+        "MeterTypeRID" = {METER_TYPE_ID} AND 
+        "DateTime" BETWEEN TO_TIMESTAMP({START_DATE}, DateFormat) AND TO_TIMESTAMP({END_DATE}, DateFormat);
+
+    SELECT 
+        SUM("AllocatedEnergy"), 
+        AVG("BuyPrice") 
+    INTO 
+        T2Energy, 
+        T2BuyPrice
+    FROM 
+        "Allocation"."ProducerT2Allocation" 
+    WHERE 
+        "ConsumerRID" = {CONSUMER_ID} AND 
+        "MeterTypeRID" = {METER_TYPE_ID} AND 
+        "DateTime" BETWEEN TO_TIMESTAMP({START_DATE}, DateFormat) AND TO_TIMESTAMP({END_DATE}, DateFormat);
+
+    SELECT 
+        SUM("ConsumerAmount") 
+    INTO 
+        T2ConsumerAmount 
+    FROM 
+        "Earning"."ProducerT2Earning"
+    WHERE 
+        "ConsumerRID" = {CONSUMER_ID} AND 
+        "MeterTypeRID" = {METER_TYPE_ID} AND 
+        "DateTime" BETWEEN TO_TIMESTAMP({START_DATE}, DateFormat) AND TO_TIMESTAMP({END_DATE}, DateFormat);
+
+    SELECT 
+        SUM("AllocatedEnergy") 
+    INTO 
+        RetailerEnergy 
+    FROM 
+        "Allocation"."RetailerAllocation"
+    WHERE 
+        "ConsumerRID" = {CONSUMER_ID} AND 
+        "MeterTypeRID" = {METER_TYPE_ID} AND 
+        "DateTime" BETWEEN TO_TIMESTAMP({START_DATE}, DateFormat) AND TO_TIMESTAMP({END_DATE}, DateFormat);
+
+    SELECT 
+        SUM("Amount") 
+    INTO 
+        RetailerEarning 
+    FROM 
+        "Earning"."RetailerEarning"
+    WHERE 
+        "ConsumerRID" = {CONSUMER_ID} AND 
+        "MeterTypeRID" = {METER_TYPE_ID} AND 
+        "DateTime" BETWEEN TO_TIMESTAMP({START_DATE}, DateFormat) AND TO_TIMESTAMP({END_DATE}, DateFormat);
+
+    IF T1Energy IS NULL THEN T1Energy = 0; END IF;
+    IF T1Earning IS NULL THEN T1Earning = 0; END IF;
+    IF T2Energy IS NULL THEN T2Energy = 0; END IF;
+    IF T2ConsumerAmount IS NULL THEN T2ConsumerAmount = 0; END IF;
+    IF T2BuyPrice IS NULL THEN T2BuyPrice = 0; END IF;
+    IF RetailerEnergy IS NULL THEN RetailerEnergy = 0; END IF;
+    IF RetailerEarning IS NULL THEN RetailerEarning = 0; END IF;
+
+    RETURN QUERY SELECT 
+        T1Energy, 
+        T1Earning, 
+        T2Energy, 
+        T2ConsumerAmount, 
+        RetailerEnergy, 
+        RetailerEarning, 
+        T2BuyPrice;
+END
+
+
+```
+
+
+There are few records we have to get.
+
+Net Value in {Month}
+- Earnings = T1 Earning + T2 Consumer Amount
+- Contracted = T1 Earning + T2 Consumer Amount + Open Market (0 for the mean time)
+- Open Market --> Set this as 0 too
+- Unsold --> Set this as 0 for the mean time (Query is a little complex)
 
 
 
@@ -529,6 +642,82 @@ According to PDF, we only need to show *Monthly Green Energy Sold* .
 so, for that, we have to get TotalGreenEnergy Allocated and the Values :)
 
 As before, we have to combine them together. You can use a union query too.
+
+``
+Get KWh Values
+``
+
+```sql
+SELECT
+    "DateTime",
+    SUM("AllocatedEnergy") AS "TT"
+FROM 
+    "Allocation"."ProducerT1Allocation"
+WHERE
+    "DateTime" BETWEEN '2020-11-01 00:00:00' AND '2021-01-31 23:30:00'
+    AND "MeterTypeRID" = 1
+    AND "ProducerRID" = {PRODUCER_RID}
+GROUP BY
+    "DateTime"
+
+UNION ALL
+
+SELECT 
+    "DateTime",
+    SUM("AllocatedEnergy") AS "TT"
+FROM
+    "Allocation"."ProducerT2Allocation"
+WHERE
+    "DateTime" BETWEEN '2020-11-01 00:00:00' AND '2021-01-31 23:30:00'
+    AND "MeterTypeRID" = 1
+    AND "ProducerRID" =  {PRODUCER_RID}
+GROUP BY
+    "DateTime"
+
+
+```
+
+``
+Get dollar Values
+``
+
+```sql
+SELECT 
+	"DateTime", 
+	SUM("Amount") AS "Amount"
+FROM 
+	"Earning"."ProducerT1Earning"
+WHERE
+	"DateTime" BETWEEN '2020-11-01 00:00:00' AND '2021-01-31 23:30:00'
+    AND "MeterTypeRID" = 1
+    AND "ProducerRID" = {PRODUCER_RID}
+GROUP BY
+	"DateTime"
+
+UNION ALL
+
+SELECT 
+	"DateTime", 
+	SUM("ProducerAmount") AS "Amount"
+FROM 
+	"Earning"."ProducerT2Earning"
+WHERE
+	"DateTime" BETWEEN '2020-11-01 00:00:00' AND '2021-01-31 23:30:00'
+    AND "MeterTypeRID" = 1
+    AND "ProducerRID" = {PRODUCER_RID}
+GROUP BY
+	"DateTime"
+
+```
+
+
+
+
+## Production (And Exports)
+
+PDF only needs to Production data and "Open Market" data is setting as zero at the moment.
+
+Follow similar pattern as Past 6 Months Usage for this chart.
 
 ``
 Get KWh Values
