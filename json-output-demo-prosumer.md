@@ -10,29 +10,29 @@ api/prosumer/{prosumer_id}/transactions?month=11&year=2022&meterType=1
 ```json
 
 {
-  "data": {
-    "meterType": "1",
-    "net_earnings": 2600, // previous_tag : total_cost
+	"data": {
+		"meterType": "1",
+		"net_earnings": 2600,
 
-    "traded": { // UI Label : 24/7 CFE
-      "name": "traded",
-      "cost": "2600",   // bhat/dollar value
-      "rec": 52,        // nearest 1000 rounded value
-      "allocation": "51987.098", // kwh value
-    },
-    "open_market": {
-      "name": "open_market",
-      "cost": "0",
-      "rec": 0,
-      "allocation": "0",
-    },
-    "unsold": {
-      "name": "unsold",
-      "cost": "1750",
-      "rec": 35,
-      "allocation": "3466907.902",
-    }
-  }
+		"traded": {
+			"name": "traded",
+			"cost": "2600",
+			"rec": 52,
+			"allocation": "51987.098"
+		},
+		"open_market": {
+			"name": "open_market",
+			"cost": "0",
+			"rec": 0,
+			"allocation": "0"
+		},
+		"unsold": {
+			"name": "unsold",
+			"cost": "1750",
+			"rec": 35,
+			"allocation": "3466907.902"
+		}
+	}
 }
 
 ```
@@ -46,51 +46,50 @@ api/prosumer/{prosumer_id}/distribution?month=11&year=2022&meterType=1
 
 ```json
 {
-  "data": {
-    "meterType": "1",
-    "traded": {
-      "name": "traded",     // UI Label : 24/7 CFE
-      "total_allocation" : "51987.098", // kwh value 
-      "total_cost": "2600", // bhat/dollar value
-      "distributionPercentage": 100, // pie-chart percentage
-      "providers": [
-        {
-          "planName": "Norwegian Embassy",
-          "providerName": "Norwegian Embassy",
-          "price": "0.05",
-          "allocation": "46297.038", // kwh value
-          "cost": "2314.8519"
-        },
-        {
-          "planName": "ETRAN",
-          "providerName": "ETRAN",
-          "price": "0.05",
-          "allocation": "5690.06", // kwh value
-          "cost": "284.503"
-        },
-        {
-          "planName": "BMW",
-          "providerName": "BMW",
-          "price": "0.05",
-          "allocation": "0", // kwh value
-          "cost": "0"
-        },
-      ]
-    },
-    "open_market": {
-      "name": "open_market",
-      "allocation": "0",
-      "cost": "0",
-      "distributionPercentage": "0",
-      "providers": [], // empty string coz no allocations
-    },
-    "unsold": {
-      "name": "unsold",
-      "allocation": "3466907.902", // kwh value
-      "cost": "1750",
-      "distributionPercentage": 0,
-    }
-  }
+	"data": {
+		"meterType": "1",
+		"traded": {
+			"name": "traded",
+			"total_allocation": "51987.098",
+			"total_cost": "2600",
+			"distributionPercentage": 100,
+			"providers": [{
+					"planName": "Norwegian Embassy",
+					"providerName": "Norwegian Embassy",
+					"price": "0.05",
+					"allocation": "46297.038",
+					"cost": "2314.8519"
+				},
+				{
+					"planName": "ETRAN",
+					"providerName": "ETRAN",
+					"price": "0.05",
+					"allocation": "5690.06",
+					"cost": "284.503"
+				},
+				{
+					"planName": "BMW",
+					"providerName": "BMW",
+					"price": "0.05",
+					"allocation": "0",
+					"cost": "0"
+				}
+			]
+		},
+		"open_market": {
+			"name": "open_market",
+			"allocation": "0",
+			"cost": "0",
+			"distributionPercentage": "0",
+			"providers": []
+		},
+		"unsold": {
+			"name": "unsold",
+			"allocation": "3466907.902",
+			"cost": "1750",
+			"distributionPercentage": 0
+		}
+	}
 }
 
 ```
@@ -953,7 +952,7 @@ api/prosumer/{prosumer_id}/breakdown?period=Y&date=2020-11-12&meterType=1
         "traded": 0,
         "unsold": 0
       }
-    },
+    }
   ]
 }
 ```
@@ -968,32 +967,30 @@ api/prosumer/{prosumer_id}/revenue?meterType=1
 
 ```json
 {
-  "meterType": "1",
-  "data": [
-    {
-      "startDate": "2022-08-31 17:00:00",
-      "endDate": "2022-09-30 16:59:59",
-      "total_cost": 2600,
-      "traded": { // UI Label : 24/7 CFE
-        "name": "traded",
-        "cost": "2600",   // bhat/dollar value
-        "rec": 52,        // nearest 1000 rounded value
-        "allocation": "51987.098", // kwh value
-      },
-      "open_market": {
-        "name": "open_market",
-        "cost": "0",
-        "rec": 0,
-        "allocation": "0",
-      },
-      "unsold": {
-        "name": "unsold",
-        "cost": "1750",
-        "rec": 35,
-        "allocation": "3466907.902",
-      }
-    }
-  ]
+	"meterType": "1",
+	"data": [{
+		"startDate": "2022-08-31 17:00:00",
+		"endDate": "2022-09-30 16:59:59",
+		"total_cost": 2600,
+		"traded": {
+			"name": "traded",
+			"cost": "2600",
+			"rec": 52,
+			"allocation": "51987.098"
+		},
+		"open_market": {
+			"name": "open_market",
+			"cost": "0",
+			"rec": 0,
+			"allocation": "0"
+		},
+		"unsold": {
+			"name": "unsold",
+			"cost": "1750",
+			"rec": 35,
+			"allocation": "3466907.902"
+		}
+	}]
 }
 
 ```
@@ -1009,33 +1006,32 @@ api/prosumer/{prosumer_id}/payments?meterType=1
 
 ```json
 {
-  "meterType": "1",
-  "data": [
-    {
-      "startDate": "2022-09-30 17:00:00",
-      "endDate": "2020-10-31 16:59:59",
-      "payment_status" : "paid",
-      "payment": 0,
-    },
-    {
-      "startDate": "2022-08-31 17:00:00",
-      "endDate": "2022-09-30 16:59:59",
-      "payment_status" : "paid",
-      "payment": 0,
-    },
-    {
-      "startDate": "2022-07-31 17:00:00",
-      "endDate": "2022-08-31 16:59:59",
-      "payment_status" : "paid",
-      "payment": 0,
-    },
-    {
-      "startDate": "2022-06-30 17:00:00",
-      "endDate": "2022-07-31 16:59:59",
-      "payment_status" : "paid",
-      "payment": 0
-    }
-  ]
+	"meterType": "1",
+	"data": [{
+			"startDate": "2022-09-30 17:00:00",
+			"endDate": "2020-10-31 16:59:59",
+			"payment_status": "paid",
+			"payment": 0
+		},
+		{
+			"startDate": "2022-08-31 17:00:00",
+			"endDate": "2022-09-30 16:59:59",
+			"payment_status": "paid",
+			"payment": 0
+		},
+		{
+			"startDate": "2022-07-31 17:00:00",
+			"endDate": "2022-08-31 16:59:59",
+			"payment_status": "paid",
+			"payment": 0
+		},
+		{
+			"startDate": "2022-06-30 17:00:00",
+			"endDate": "2022-07-31 16:59:59",
+			"payment_status": "paid",
+			"payment": 0
+		}
+	]
 }
 
 ```
