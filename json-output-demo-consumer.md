@@ -12,22 +12,22 @@ api/consumer/{consumer_id}/overview?month=11&year=2022&meterType=1
 ```json
 
 {
-  "data": {
-    "meterType": "1",
-    "net_earnings": 2300, // previous_tag : total_cost
-    "traded": { // UI Label : Greeb attributes
-      "name": "traded",
-      "allocation": "47",
-      "cost": "2350",
-      "distributionPercentage": 100
-    },
-    "energy_load": {
-      "name": "energy_load",
-      "allocation": "0",
-      "cost": "0",
-      "distributionPercentage": 0
-    }
-  }
+	"data": {
+		"meterType": "1",
+		"net_earnings": 2300,
+		"traded": {
+			"name": "traded",
+			"allocation": "47",
+			"cost": "2350",
+			"distributionPercentage": 100
+		},
+		"energy_load": {
+			"name": "energy_load",
+			"allocation": "0",
+			"cost": "0",
+			"distributionPercentage": 0
+		}
+	}
 }
 
 ```
@@ -40,83 +40,81 @@ api/consumer/{consumer_id}/usage?meterType=1
 ``
 
 ```json
-
 {
-  "meterType": "1",
-  "data": [
-    {
-      "startDate": "2019-12-31 17:00:00",
-      "endDate": "2020-01-31 16:59:59",
-      "bill": {
-        "traded": 0, // green attributes
-        "energy_load": 0  // energy load
-      },
-      "usage": {
-        "traded": 0, // green attributes
-        "energy_load": 0  // energy load
-      }
-    },
-    {
-      "startDate": "2020-01-31 17:00:00",
-      "endDate": "2020-02-28 16:59:59",
-      "bill": {
-        "traded": 0,
-        "energy_load": 0
-      },
-      "usage": {
-        "traded": 0,
-        "energy_load": 0
-      }
-    },
-    {
-      "startDate": "2020-02-28 17:00:00",
-      "endDate": "2020-03-31 16:59:59",
-      "bill": {
-        "traded": 0,
-        "energy_load": 0
-      },
-      "usage": {
-        "traded": 0,
-        "energy_load": 0
-      }
-    },
-    {
-      "startDate": "2020-03-31 17:00:00",
-      "endDate": "2020-04-30 16:59:59",
-      "bill": {
-        "traded": 0,
-        "energy_load": 0
-      },
-      "usage": {
-        "traded": 0,
-        "energy_load": 0
-      }
-    },
-    {
-      "startDate": "2020-04-30 17:00:00",
-      "endDate": "2020-05-31 16:59:59",
-      "bill": {
-        "traded": 0,
-        "energy_load": 0
-      },
-      "usage": {
-        "traded": 0,
-        "energy_load": 0
-      }
-    },
-    {
-      "startDate": "2020-05-31 17:00:00",
-      "endDate": "2020-06-30 16:59:59",
-      "bill": {
-        "traded": 2314.8519,
-        "energy_load": 0
-      },
-      "usage": {
-        "traded": 46297.038,
-        "energy_load": 0
-      }
-    }
-  ]
+	"meterType": "1",
+	"data": [{
+			"startDate": "2019-12-31 17:00:00",
+			"endDate": "2020-01-31 16:59:59",
+			"bill": {
+				"traded": 0,
+				"energy_load": 0
+			},
+			"usage": {
+				"traded": 0,
+				"energy_load": 0
+			}
+		},
+		{
+			"startDate": "2020-01-31 17:00:00",
+			"endDate": "2020-02-28 16:59:59",
+			"bill": {
+				"traded": 0,
+				"energy_load": 0
+			},
+			"usage": {
+				"traded": 0,
+				"energy_load": 0
+			}
+		},
+		{
+			"startDate": "2020-02-28 17:00:00",
+			"endDate": "2020-03-31 16:59:59",
+			"bill": {
+				"traded": 0,
+				"energy_load": 0
+			},
+			"usage": {
+				"traded": 0,
+				"energy_load": 0
+			}
+		},
+		{
+			"startDate": "2020-03-31 17:00:00",
+			"endDate": "2020-04-30 16:59:59",
+			"bill": {
+				"traded": 0,
+				"energy_load": 0
+			},
+			"usage": {
+				"traded": 0,
+				"energy_load": 0
+			}
+		},
+		{
+			"startDate": "2020-04-30 17:00:00",
+			"endDate": "2020-05-31 16:59:59",
+			"bill": {
+				"traded": 0,
+				"energy_load": 0
+			},
+			"usage": {
+				"traded": 0,
+				"energy_load": 0
+			}
+		},
+		{
+			"startDate": "2020-05-31 17:00:00",
+			"endDate": "2020-06-30 16:59:59",
+			"bill": {
+				"traded": 2314.8519,
+				"energy_load": 0
+			},
+			"usage": {
+				"traded": 46297.038,
+				"energy_load": 0
+			}
+		}
+	]
 }
 
 ```
@@ -979,7 +977,7 @@ api/prosumer/{prosumer_id}/breakdown?period=Y&date=2020-11-12&meterType=1
         "traded": 0,
         "energy_load": 0
       }
-    },
+    }
   ]
 }
 ```
@@ -994,26 +992,24 @@ api/consumer/{consumer_id}/invoices?meterType=1
 
 ```json
 {
-  "meterType": "1",
-  "data": [
-    {
-      "startDate": "2022-08-31 17:00:00",
-      "endDate": "2020-09-30 16:59:59",
-      "total_cost": 2350,
-      "traded": { // UI Label : 24/7 CFE
-        "name": "traded",
-        "cost": "2350",   // bhat/dollar value
-        "rec": 47,        // nearest 1000 rounded value
-        "allocation": "46297.038", // kwh value
-      },
-      "open_market": {
-        "name": "open_market",
-        "cost": "0",
-        "rec": 0,
-        "allocation": "0",
-      }
-    }
-  ]
+	"meterType": "1",
+	"data": [{
+		"startDate": "2022-08-31 17:00:00",
+		"endDate": "2020-09-30 16:59:59",
+		"total_cost": 2350,
+		"traded": {
+			"name": "traded",
+			"cost": "2350",
+			"rec": 47,
+			"allocation": "46297.038"
+		},
+		"open_market": {
+			"name": "open_market",
+			"cost": "0",
+			"rec": 0,
+			"allocation": "0"
+		}
+	}]
 }
 
 ```
@@ -1029,15 +1025,13 @@ api/consumer/{consumer_id}/invoices?meterType=1
 
 ```json
 {
-  "meterType": "1",
-  "data": [
-    {
-      "startDate": "2022-08-31 17:00:00",
-      "endDate": "2020-09-30 16:59:59",
-      "payment_status" : "paid",
-      "payment": 2350,
-    }
-  ]
+	"meterType": "1",
+	"data": [{
+		"startDate": "2022-08-31 17:00:00",
+		"endDate": "2020-09-30 16:59:59",
+		"payment_status": "paid",
+		"payment": 2350
+	}]
 }
 
 ```
