@@ -14,7 +14,7 @@ api/consumer/{consumer_id}/overview?month=11&year=2022&meterType=1
 {
 	"data": {
 		"meterType": "1",
-		"net_earnings": 2300,
+		"net_earnings": 2350,
 		"traded": {
 			"name": "traded",
 			"allocation": "47",
@@ -137,8 +137,8 @@ api/consumer/{consumer_id}/breakdown?period=D&date=2020-11-12&meterType=1
   "meterType": "1",
   "data": [
     {
-    "startDate": "2022-08-31 17:00:00 17:00:00",
-    "endDate": "2022-08-31 17:00:00 17:00:00",
+    "startDate": "2022-08-31 17:00:00",
+    "endDate": "2022-08-31 17:00:00",
     "bill": {
       "traded": 3.5265,
       "energy_load": 0
@@ -149,8 +149,8 @@ api/consumer/{consumer_id}/breakdown?period=D&date=2020-11-12&meterType=1
     }
   },
   {
-    "startDate": "2022-08-31 18:00:00 17:00:00",
-    "endDate": "2022-08-31 18:00:00 17:00:00",
+    "startDate": "2022-08-31 18:00:00",
+    "endDate": "2022-08-31 18:00:00",
     "bill": {
       "traded": 3.27415,
       "energy_load": 0
@@ -161,8 +161,8 @@ api/consumer/{consumer_id}/breakdown?period=D&date=2020-11-12&meterType=1
     }
   },
   {
-    "startDate": "2022-08-31 19:00:00 17:00:00",
-    "endDate": "2022-08-31 19:00:00 17:00:00",
+    "startDate": "2022-08-31 19:00:00",
+    "endDate": "2022-08-31 19:00:00",
     "bill": {
       "traded": 3.34705,
       "energy_load": 0
@@ -173,8 +173,8 @@ api/consumer/{consumer_id}/breakdown?period=D&date=2020-11-12&meterType=1
     }
   },
   {
-    "startDate": "2022-08-31 20:00:00 17:00:00",
-    "endDate": "2022-08-31 20:00:00 17:00:00",
+    "startDate": "2022-08-31 20:00:00",
+    "endDate": "2022-08-31 20:00:00",
     "bill": {
       "traded": 3.0618,
       "energy_load": 0
@@ -185,8 +185,8 @@ api/consumer/{consumer_id}/breakdown?period=D&date=2020-11-12&meterType=1
     }
   },
   {
-    "startDate": "2022-08-31 21:00:00 17:00:00",
-    "endDate": "2022-08-31 21:00:00 17:00:00",
+    "startDate": "2022-08-31 21:00:00",
+    "endDate": "2022-08-31 21:00:00",
     "bill": {
       "traded": 3.83155,
       "energy_load": 0
@@ -197,8 +197,8 @@ api/consumer/{consumer_id}/breakdown?period=D&date=2020-11-12&meterType=1
     }
   },
   {
-    "startDate": "2022-08-31 22:00:00 17:00:00",
-    "endDate": "2022-08-31 22:00:00 17:00:00",
+    "startDate": "2022-08-31 22:00:00",
+    "endDate": "2022-08-31 22:00:00",
     "bill": {
       "traded": 3.76585,
       "energy_load": 0
@@ -209,8 +209,8 @@ api/consumer/{consumer_id}/breakdown?period=D&date=2020-11-12&meterType=1
     }
   },
   {
-    "startDate": "2022-08-31 23:00:00 17:00:00",
-    "endDate": "2022-08-31 23:00:00 17:00:00",
+    "startDate": "2022-08-31 23:00:00",
+    "endDate": "2022-08-31 23:00:00",
     "bill": {
       "traded": 3.64285,
       "energy_load": 0
@@ -221,8 +221,8 @@ api/consumer/{consumer_id}/breakdown?period=D&date=2020-11-12&meterType=1
     }
   },
   {
-    "startDate": "2022-09-01 00:00:00 17:00:00",
-    "endDate": "2022-09-01 00:00:00 17:00:00",
+    "startDate": "2022-09-01 00:00:00",
+    "endDate": "2022-09-01 00:00:00",
     "bill": {
       "traded": 4.28945,
       "energy_load": 0
@@ -233,8 +233,8 @@ api/consumer/{consumer_id}/breakdown?period=D&date=2020-11-12&meterType=1
     }
   },
   {
-    "startDate": "2022-09-01 01:00:00 17:00:00",
-    "endDate": "2022-09-01 01:00:00 17:00:00",
+    "startDate": "2022-09-01 01:00:00",
+    "endDate": "2022-09-01 01:00:00",
     "bill": {
       "traded": 4.1957,
       "energy_load": 0
@@ -245,8 +245,8 @@ api/consumer/{consumer_id}/breakdown?period=D&date=2020-11-12&meterType=1
     }
   },
   {
-    "startDate": "2022-09-01 02:00:00 17:00:00",
-    "endDate": "2022-09-01 02:00:00 17:00:00",
+    "startDate": "2022-09-01 02:00:00",
+    "endDate": "2022-09-01 02:00:00",
     "bill": {
       "traded": 2.77525,
       "energy_load": 0
@@ -257,8 +257,8 @@ api/consumer/{consumer_id}/breakdown?period=D&date=2020-11-12&meterType=1
     }
   },
   {
-    "startDate": "2022-09-01 03:00:00 17:00:00",
-    "endDate": "2022-09-01 03:00:00 17:00:00",
+    "startDate": "2022-09-01 03:00:00",
+    "endDate": "2022-09-01 03:00:00",
     "bill": {
       "traded": 3.39035,
       "energy_load": 0
@@ -269,8 +269,8 @@ api/consumer/{consumer_id}/breakdown?period=D&date=2020-11-12&meterType=1
     }
   },
   {
-    "startDate": "2022-09-01 04:00:00 17:00:00",
-    "endDate": "2022-09-01 04:00:00 17:00:00",
+    "startDate": "2022-09-01 04:00:00",
+    "endDate": "2022-09-01 04:00:00",
     "bill": {
       "traded": 1.2138,
       "energy_load": 0
@@ -281,8 +281,8 @@ api/consumer/{consumer_id}/breakdown?period=D&date=2020-11-12&meterType=1
     }
   },
   {
-    "startDate": "2022-09-01 05:00:00 17:00:00",
-    "endDate": "2022-09-01 05:00:00 17:00:00",
+    "startDate": "2022-09-01 05:00:00",
+    "endDate": "2022-09-01 05:00:00",
     "bill": {
       "traded": 1.42125,
       "energy_load": 0
@@ -293,8 +293,8 @@ api/consumer/{consumer_id}/breakdown?period=D&date=2020-11-12&meterType=1
     }
   },
   {
-    "startDate": "2022-09-01 06:00:00 17:00:00",
-    "endDate": "2022-09-01 06:00:00 17:00:00",
+    "startDate": "2022-09-01 06:00:00",
+    "endDate": "2022-09-01 06:00:00",
     "bill": {
       "traded": 2.88585,
       "energy_load": 0
@@ -305,8 +305,8 @@ api/consumer/{consumer_id}/breakdown?period=D&date=2020-11-12&meterType=1
     }
   },
   {
-    "startDate": "2022-09-01 07:00:00 17:00:00",
-    "endDate": "2022-09-01 07:00:00 17:00:00",
+    "startDate": "2022-09-01 07:00:00",
+    "endDate": "2022-09-01 07:00:00",
     "bill": {
       "traded": 4.8564,
       "energy_load": 0
@@ -317,8 +317,8 @@ api/consumer/{consumer_id}/breakdown?period=D&date=2020-11-12&meterType=1
     }
   },
   {
-    "startDate": "2022-09-01 08:00:00 17:00:00",
-    "endDate": "2022-09-01 08:00:00 17:00:00",
+    "startDate": "2022-09-01 08:00:00",
+    "endDate": "2022-09-01 08:00:00",
     "bill": {
       "traded": 4.4882,
       "energy_load": 0
@@ -329,8 +329,8 @@ api/consumer/{consumer_id}/breakdown?period=D&date=2020-11-12&meterType=1
     }
   },
   {
-    "startDate": "2022-09-01 09:00:00 17:00:00",
-    "endDate": "2022-09-01 09:00:00 17:00:00",
+    "startDate": "2022-09-01 09:00:00",
+    "endDate": "2022-09-01 09:00:00",
     "bill": {
       "traded": 3.32095,
       "energy_load": 0
@@ -341,8 +341,8 @@ api/consumer/{consumer_id}/breakdown?period=D&date=2020-11-12&meterType=1
     }
   },
   {
-    "startDate": "2022-09-01 10:00:00 17:00:00",
-    "endDate": "2022-09-01 10:00:00 17:00:00",
+    "startDate": "2022-09-01 10:00:00",
+    "endDate": "2022-09-01 10:00:00",
     "bill": {
       "traded": 3.63685,
       "energy_load": 0
@@ -353,8 +353,8 @@ api/consumer/{consumer_id}/breakdown?period=D&date=2020-11-12&meterType=1
     }
   },
   {
-    "startDate": "2022-09-01 11:00:00 17:00:00",
-    "endDate": "2022-09-01 11:00:00 17:00:00",
+    "startDate": "2022-09-01 11:00:00",
+    "endDate": "2022-09-01 11:00:00",
     "bill": {
       "traded": 3.8837,
       "energy_load": 0
@@ -365,8 +365,8 @@ api/consumer/{consumer_id}/breakdown?period=D&date=2020-11-12&meterType=1
     }
   },
   {
-    "startDate": "2022-09-01 12:00:00 17:00:00",
-    "endDate": "2022-09-01 12:00:00 17:00:00",
+    "startDate": "2022-09-01 12:00:00",
+    "endDate": "2022-09-01 12:00:00",
     "bill": {
       "traded": 4.55795,
       "energy_load": 0
@@ -377,8 +377,8 @@ api/consumer/{consumer_id}/breakdown?period=D&date=2020-11-12&meterType=1
     }
   },
   {
-    "startDate": "2022-09-01 13:00:00 17:00:00",
-    "endDate": "2022-09-01 13:00:00 17:00:00",
+    "startDate": "2022-09-01 13:00:00",
+    "endDate": "2022-09-01 13:00:00",
     "bill": {
       "traded": 4.597,
       "energy_load": 0
@@ -389,8 +389,8 @@ api/consumer/{consumer_id}/breakdown?period=D&date=2020-11-12&meterType=1
     }
   },
   {
-    "startDate": "2022-09-01 14:00:00 17:00:00",
-    "endDate": "2022-09-01 14:00:00 17:00:00",
+    "startDate": "2022-09-01 14:00:00",
+    "endDate": "2022-09-01 14:00:00",
     "bill": {
       "traded": 3.5841,
       "energy_load": 0
@@ -401,8 +401,8 @@ api/consumer/{consumer_id}/breakdown?period=D&date=2020-11-12&meterType=1
     }
   },
   {
-    "startDate": "2022-09-01 15:00:00 17:00:00",
-    "endDate": "2022-09-01 15:00:00 17:00:00",
+    "startDate": "2022-09-01 15:00:00",
+    "endDate": "2022-09-01 15:00:00",
     "bill": {
       "traded": 3.59805,
       "energy_load": 0
@@ -413,8 +413,8 @@ api/consumer/{consumer_id}/breakdown?period=D&date=2020-11-12&meterType=1
     }
   },
   {
-    "startDate": "2022-09-01 16:00:00 17:00:00",
-    "endDate": "2022-09-01 16:00:00 17:00:00",
+    "startDate": "2022-09-01 16:00:00",
+    "endDate": "2022-09-01 16:00:00",
     "bill": {
       "traded": 3.8451,
       "energy_load": 0
